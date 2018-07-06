@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "103793839073",
+    "firebase_url": "https://fir-blog-a2a52.firebaseio.com",
+    "project_id": "fir-blog-a2a52",
+    "storage_bucket": "fir-blog-a2a52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103793839073:android:2743009f91c71599",
+        "android_client_info": {
+          "package_name": "com.example.aalap.blogs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103793839073-qvgoiqkmdfeprjgu3t3qtmqkqrm7koqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA45rmE2ebUkiRwO0H4AOg-BZTSC08J9e8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 package com.example.aalap.blogs;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView loginText;
     int loginButtonExpandedWidth;
+    public static final String EMAIL = "Email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 else {
                     animateButtonWidth(true);
-                    registerUser(userName.getText().toString(), password.getText().toString());
+                    loginUser(userName.getText().toString(), password.getText().toString());
                 }
             }
         });
@@ -93,6 +95,25 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "resultLogs: " + authResult.getUser().getDisplayName());
         Log.d(TAG, "resultLogs: " + authResult.getUser().getPhoneNumber());
         Log.d(TAG, "resultLogs: " + authResult.getUser().getEmail());
+
+        Intent intent = new Intent(this, BlogList.class);
+        intent.putExtra(EMAIL, authResult.getUser().getEmail());
+        startActivity(intent);
+    }
+
+    private void loginUser(String userName, String password) {
+        authInstance.signInWithEmailAndPassword(userName, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                    resultLogs(authResult);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "onFailure: "+e.getMessage());
+            }
+        });
     }
 
     private void animateButtonWidth(final boolean isShrink) {
@@ -120,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getFabWidth() {
-        return (int) getResources().getDimension(R.dimen.fab_margin);
+        return (int) getResources().getDimension(R.dimen.fab_width);
     }
 
     private int getButtonWidth() {
