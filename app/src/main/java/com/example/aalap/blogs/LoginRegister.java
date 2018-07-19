@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginRegister extends AppCompatActivity {
 
     EditText userName, password;
     View loginButton;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progress_bar);
         progressBar.getIndeterminateDrawable().setColorFilter(
-                ContextCompat.getColor(MainActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                ContextCompat.getColor(LoginRegister.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
         loginText = findViewById(R.id.text);
 
         authInstance = FirebaseAuth.getInstance();
@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (TextUtils.isEmpty(userName.getText().toString()))
-                    Toast.makeText(MainActivity.this, "Enter Username", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginRegister.this, "Enter Username", Toast.LENGTH_SHORT).show();
                 else if (TextUtils.isEmpty(password.getText().toString()))
-                    Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginRegister.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 else {
                     animateButtonWidth(true);
                     loginUser(userName.getText().toString(), password.getText().toString());
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(AuthResult authResult) {
                 //circular effect with for new screen
                 resultLogs(authResult);
-                Toast.makeText(MainActivity.this, "Registered", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginRegister.this, "Registered", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -91,12 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resultLogs(AuthResult authResult) {
-        Log.d(TAG, "resultLogs: " + authResult.getAdditionalUserInfo().getUsername());
-        Log.d(TAG, "resultLogs: " + authResult.getUser().getDisplayName());
-        Log.d(TAG, "resultLogs: " + authResult.getUser().getPhoneNumber());
-        Log.d(TAG, "resultLogs: " + authResult.getUser().getEmail());
-
-        Intent intent = new Intent(this, BlogList.class);
+        Intent intent = new Intent(this, MainScreen.class);
         intent.putExtra(EMAIL, authResult.getUser().getEmail());
         startActivity(intent);
     }
