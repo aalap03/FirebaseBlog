@@ -33,9 +33,13 @@ public class MainScreen extends AppCompatActivity {
         tabLayout = findViewById(R.id.tablayout);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.DB_REFERENCE);
-        Log.d(TAG, "onCreate: "+mDatabase);
+        Log.d(TAG, "onCreate: " + mDatabase);
 
         tabPagerAdapter = new TabAdapter(getSupportFragmentManager());
+        setupViewPager();
+    }
+
+    private void setupViewPager() {
         tabPagerAdapter.addFragment(new FragmentSearch());
         tabPagerAdapter.addFragment(new FragmentSavedItems());
         tabPagerAdapter.addFragment(new FragmentPostItem());
@@ -43,7 +47,6 @@ public class MainScreen extends AppCompatActivity {
 
         viewPager.setAdapter(tabPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
 }

@@ -11,11 +11,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aalap.blogs.Utilities.Preference;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -31,6 +33,8 @@ public class LoginRegister extends AppCompatActivity {
     TextView loginText;
     int loginButtonExpandedWidth;
     public static final String EMAIL = "Email";
+    CheckBox saveCredentials;
+    Preference preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,10 @@ public class LoginRegister extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         loginButton = findViewById(R.id.login_button);
+        saveCredentials = findViewById(R.id.save_creds);
         loginButtonExpandedWidth = loginButton.getMeasuredWidth();
+        preference = new Preference(getApplicationContext());
+
         Log.d(TAG, "onCreate: " + getButtonWidth());
         userName = findViewById(R.id.user_name);
         password = findViewById(R.id.password);
@@ -46,6 +53,16 @@ public class LoginRegister extends AppCompatActivity {
         progressBar.getIndeterminateDrawable().setColorFilter(
                 ContextCompat.getColor(LoginRegister.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
         loginText = findViewById(R.id.text);
+
+        if (preference.isSaveCreds()) {
+            userName.setText(preference.getUserName());
+            password.setText(preference.getPassword());
+        } else {
+            userName.setText("");
+            password.setText("");
+        }
+
+        saveCredentials.setChecked(preference.isSaveCreds());
 
         authInstance = FirebaseAuth.getInstance();
 
@@ -59,7 +76,18 @@ public class LoginRegister extends AppCompatActivity {
                     Toast.makeText(LoginRegister.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 else {
                     animateButtonWidth(true);
-                    loginUser(userName.getText().toString(), password.getText().toString());
+
+                    preference.saveCredentials(saveCredentials.isChecked());
+
+                    if (saveCredentials.isChecked()) {
+                        preference.setPassword(password.getText().toString().trim());
+                        preference.setUserName(userName.getText().toString().trim());
+                    } else {
+                        preference.setPassword("");
+                        preference.setUserName("");
+                    }
+
+                    loginUser(userName.getText().toString().trim(), password.getText().toString().trim());
                 }
             }
         });
@@ -70,7 +98,7 @@ public class LoginRegister extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
                 //circular effect with for new screen
-                resultLogs(authResult);
+                logIn(authResult);
                 Toast.makeText(LoginRegister.this, "Registered", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -90,23 +118,24 @@ public class LoginRegister extends AppCompatActivity {
         });
     }
 
-    private void resultLogs(AuthResult authResult) {
+    private void logIn(AuthResult authResult) {
         Intent intent = new Intent(this, MainScreen.class);
         intent.putExtra(EMAIL, authResult.getUser().getEmail());
         startActivity(intent);
+        finish();
     }
 
     private void loginUser(String userName, String password) {
         authInstance.signInWithEmailAndPassword(userName, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                    resultLogs(authResult);
+                logIn(authResult);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "onFailure: "+e.getMessage());
+                Log.d(TAG, "onFailure: " + e.getMessage());
             }
         });
     }
