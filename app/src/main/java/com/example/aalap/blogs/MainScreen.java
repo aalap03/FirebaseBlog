@@ -1,5 +1,8 @@
 package com.example.aalap.blogs;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -22,6 +25,14 @@ public class MainScreen extends AppCompatActivity {
     TabAdapter tabPagerAdapter;
     ViewPager viewPager;
     TabLayout tabLayout;
+    ImageResult imageResult;
+    public static final int CAMERA = 5;
+    public static final int GALLERY = 6;
+
+    public interface ImageResult {
+        void imageUri(Uri uri);
+        void imageBitmap(Bitmap bitmap);
+    }
 
 
     @Override
@@ -48,5 +59,4 @@ public class MainScreen extends AppCompatActivity {
         viewPager.setAdapter(tabPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 }

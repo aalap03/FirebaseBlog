@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
@@ -15,37 +16,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.aalap.blogs.MainScreen
 import com.example.aalap.blogs.Manifest
 import com.example.aalap.blogs.R
 import com.example.aalap.blogs.Utilities.DialogFrag
 import kotlinx.android.synthetic.main.fragment_post_item.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class FragmentPostItem : Fragment(), DialogFrag.ImageChhosed, DialogFrag.ImageResult {
+
+
+class FragmentPostItem : Fragment(),  DialogFrag.ImageResult, AnkoLogger {
     override fun imageUri(uri: Uri) {
+        info { "Image:uri:$uri" }
         post_image.setImageURI(uri)
     }
 
     override fun imageBitmap(bitmap: Bitmap) {
+        info { "Image:Bitmap$bitmap" }
         post_image.setImageBitmap(bitmap)
     }
 
     companion object {
         val TAG = "FragmentPostItem:"
-        val GALLERY = 1
-        val CAMERA = 2
         val CODE = 3
-    }
-
-    override fun isGallery(isGallery: Boolean) {
-        var intent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-
-        if (isGallery) {
-            intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
-            startActivityForResult(intent, GALLERY)
-        } else {
-            startActivityForResult(intent, CAMERA)
-        }
+        val CAMERA = 2
+        val GALLERY = 4
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,7 +67,7 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageChhosed, DialogFrag.ImageRe
             Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
     }
 
-    fun handlePermissions() {
+    private fun handlePermissions() {
 
         if (ContextCompat.checkSelfPermission(activity!!, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(activity!!, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -99,6 +95,4 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageChhosed, DialogFrag.ImageRe
         dialog.setTargetFragment(this, 1)
         dialog.show(fragmentManager, TAG)
     }
-
-
 }
