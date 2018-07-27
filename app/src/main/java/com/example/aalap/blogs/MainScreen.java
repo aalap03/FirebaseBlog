@@ -19,21 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainScreen extends AppCompatActivity {
 
-    TextView textView;
     private DatabaseReference mDatabase;
     private static final String TAG = "MainScreen:";
     TabAdapter tabPagerAdapter;
     ViewPager viewPager;
     TabLayout tabLayout;
-    ImageResult imageResult;
-    public static final int CAMERA = 5;
-    public static final int GALLERY = 6;
-
-    public interface ImageResult {
-        void imageUri(Uri uri);
-        void imageBitmap(Bitmap bitmap);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
