@@ -168,10 +168,7 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageResult, AnkoLogger {
 
                     storageReference.downloadUrl
                 }
-
-                .addOnCompleteListener { taskSnapshot ->
-
-
+                .addOnSuccessListener { uri ->
                     Toast.makeText(context, "Image Posted...", Toast.LENGTH_SHORT).show()
 
                     val postItem = PostItem(
@@ -184,7 +181,7 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageResult, AnkoLogger {
                             post_state_province.text.toString(),
                             post_city.text.toString(),
                             post_email.text.toString(),
-                            taskSnapshot.toString())
+                            uri.toString())
 
                     info { "posting...$postItem" }
 
@@ -194,10 +191,9 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageResult, AnkoLogger {
 
                     resetFields()
 
-
                 }.addOnFailureListener { exception ->
                     exception.printStackTrace()
-                    info { "Exception Message: ${exception.localizedMessage }"}
+                    info { "Exception Message: ${exception.localizedMessage}" }
                 }
     }
 
