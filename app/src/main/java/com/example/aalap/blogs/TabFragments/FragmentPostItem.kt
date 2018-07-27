@@ -39,6 +39,7 @@ class FragmentPostItem : Fragment(), DialogFrag.ImageResult, AnkoLogger {
         bitmap = null
     }
 
+
     override fun imageBitmap(bitmap: Bitmap) {
         info { "Image:Bitmap$bitmap" }
         post_image.setImageBitmap(bitmap)
