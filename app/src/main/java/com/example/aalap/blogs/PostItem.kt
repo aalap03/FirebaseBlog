@@ -1,6 +1,6 @@
 package com.example.aalap.blogs
 
-import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class PostItem(
         val postId: String,
